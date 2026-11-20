@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300..800&family=Chakra+Petch:wght@500;600;700&display=swap');
+
+:root{
+  --bg: #050507;
+  --surface: #0c090e;
+  --card: #120c15;
+  --card-2: #190f1c;
+  --pink: #ff2d87;
+  --pink-soft: #ff6fb0;
+  --amber: #ffa31a;
+  --text: #f6f1f7;
+  --muted: #a094a3;
+  --line: rgba(255, 45, 135, 0.38);
+  --line-soft: rgba(255, 45, 135, 0.16);
+  --glow: 0 0 14px rgba(255, 45, 135, 0.45), inset 0 0 14px rgba(255, 45, 135, 0.08);
+  --font-display: 'Chakra Petch', 'Outfit', sans-serif;
+}
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+body{
+    min-height: 100vh;
+    color: var(--text);
+    background:
+      radial-gradient(900px 500px at 85% -5%, rgba(255, 45, 135, 0.12), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+hr{
+    border: none;
+    height: 1px;
+    background-color: var(--line-soft);
+}
+.app-content{
+    display: flex;
+}
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.cursor{
+    cursor: pointer;
+}
+@keyframes fadeIn{
+  0%{ opacity: 0; }
+  100%{ opacity: 1; }
+}
+/* shared form controls */
+input, textarea, select{
+    background: #08050a;
+    color: var(--text);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    outline: none;
+    transition: 0.2s;
+}
+input:focus, textarea:focus, select:focus{
+    border-color: var(--pink);
+    box-shadow: var(--glow);
+}
+input::placeholder, textarea::placeholder{ color: #6d6270; }
+select option{ background: #120c15; color: var(--text); }
+
+/* toasts */
+.Toastify__toast{
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--line);
+  border-radius: 10px !important;
+  box-shadow: var(--glow);
+}
+.Toastify__close-button{ color: var(--muted) !important; }

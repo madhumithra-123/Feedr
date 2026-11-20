@@ -1,0 +1,30 @@
+.feedr-logo{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.feedr-logo svg{
+  filter: drop-shadow(0 0 6px rgba(255, 45, 135, 0.7));
+}
+.feedr-logo-text{
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.feedr-logo-name{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+}
+.feedr-logo-tag{
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 8.5px;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--amber);
+  white-space: nowrap;
+}
