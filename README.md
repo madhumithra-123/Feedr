@@ -1,610 +1,367 @@
-# 🍔 Feedr – Online Food Ordering System
+# Feedr - Food. Love. Delivered.
 
-Feedr is a full-stack online food ordering web application that allows customers to browse food items, explore different food categories, add products to their cart, and place orders online with Cash on Delivery (COD).
+Feedr is a full-stack food ordering web application built with the **MERN stack**
+(MongoDB, Express, React, Node.js). Customers browse a menu, build a cart, and place
+orders (Cash on Delivery). Admins manage the menu and track orders from a separate panel.
 
-The project also includes a separate Admin Panel that allows administrators to manage food products, upload food images, view customer orders, and update order delivery statuses.
-
-The application is developed using the **MERN Stack (MongoDB, Express.js, React.js and Node.js)**.
-
----
-
-## 📌 Table of Contents
-
-1. Project Overview
-2. Main Features
-3. Technologies Used
-4. Project Architecture
-5. Detailed Working of the Project
-6. User Authentication and Authorization
-7. Shopping Cart Management
-8. Order Processing System
-9. Admin Panel
-10. Database Design
-11. API Endpoints
-12. Project Folder Structure
-13. Installation and Setup
-14. Environment Variables
-15. Running the Application
-
----
-
-## 1. Project Overview
-
-Feedr provides an online platform where customers can conveniently order food without visiting a physical restaurant.
-
-The application consists of three major components:
-
-- **Customer Frontend:** Allows users to browse food items, register, log in, manage their cart and place orders.
-- **Admin Panel:** Allows administrators to add and remove food items and manage customer orders.
-- **Backend Server:** Handles authentication, database operations, food management, cart operations and order processing.
-
-MongoDB is used to store user information, food details, cart data and order information.
-
----
-
-## 2. Main Features
-
-### Customer Features
-- User registration and login.
-- Browse all available food items.
-- Explore food items based on categories.
-- View food descriptions and prices.
-- Add food items to the shopping cart.
-- Increase or decrease item quantities.
-- View cart subtotal and delivery charges.
-- Enter delivery information.
-- Place orders using Cash on Delivery.
-- View previously placed orders.
-- Track order status.
-
-### Admin Features
-- Secure admin login.
-- Add new food products.
-- Upload food images.
-- Specify food name, description, price and category.
-- View all available food products.
-- Remove food products.
-- View all customer orders.
-- View customer delivery information.
-- Update order status.
-
----
-
-## 3. Technologies Used
-
-| Technology | Purpose |
+| App | Live URL |
 |---|---|
-| React.js | Frontend user interface |
-| Vite | Frontend development and build tool |
-| Node.js | Backend runtime environment |
-| Express.js | Backend API development |
-| MongoDB Atlas | Cloud database |
-| Mongoose | MongoDB object modelling |
-| JWT | User authentication |
-| Bcrypt | Password hashing |
-| Axios | HTTP requests between frontend and backend |
-| Multer | Food image uploads |
-| React Router | Frontend navigation |
-| React Toastify | Success and error notifications |
-| CSS | Application styling |
+| Customer website | https://feedr-ten.vercel.app/ |
+| Admin panel | https://feedr-qjd6.vercel.app/ |
+
+> **Heads up:** the backend runs on a free hosting plan that sleeps when idle. The first
+> load after a quiet period can take up to ~50 seconds while the server wakes up. After that
+> everything is fast.
 
 ---
 
-## 4. Project Architecture
+# Part 1 - How to use Feedr
 
-Feedr follows a three-part application architecture.
+## A. For customers (https://feedr-ten.vercel.app/)
 
-**1. Frontend Layer**
+### 1. Browse the menu
+- The home page opens with the hero section ("Delicious Food Delivered To Your Door"),
+  quick stats, and the **Explore our menu** category tiles.
+- Click a category tile (Salad, Rolls, Deserts, Sandwich, Cake, Pure Veg, Pasta, Noodles)
+  to filter **Popular dishes** to that category. The selected tile glows pink.
+- Click **View all** (next to "Popular dishes") to clear the filter and show every dish.
+- The **Exclusive offers** and **Why choose us** sections are informational banners.
+- The navbar links (Home, Menu, Offers, Mobile-app, Contact us) scroll to sections of the page.
 
-The React frontend provides the customer interface. Users interact with the application through pages such as Home, Cart, Place Order and My Orders.
+### 2. Create an account / sign in
+1. Click **Sign in** in the top-right corner.
+2. To register, click **Click here** under "Create a new account?", then enter your
+   **name, email and password** (password must be **at least 8 characters**).
+3. Tick the terms checkbox and press **Create account**. You are signed in immediately.
+4. Next time, use the **Login** form with your email and password.
 
-**2. Backend Layer**
+You can browse without an account, but you need to be signed in to **place an order** and
+to have your cart **saved on the server**.
 
-The Express.js backend receives requests from both the customer frontend and admin panel. It processes requests through routes, controllers and middleware.
+### 3. Add dishes to your cart
+- On any dish card press **Add +**. The button turns into a counter: use **−** and **+**
+  to change the quantity.
+- A pink dot appears on the **bag icon** in the navbar whenever your cart has items.
 
-**3. Database Layer**
+### 4. Review your cart
+1. Click the **bag icon** to open the Cart page.
+2. Each row shows the image, title, price, quantity and line total. Click the **x** to
+   remove an item completely.
+3. **Cart Totals** shows the subtotal, a flat **$2 delivery fee**, and the total.
+4. Press **Proceed to checkout**.
 
-MongoDB stores application data. Mongoose models define the structure of users, food products and orders.
+### 5. Place your order
+1. Fill in the **Delivery Information** form: name, email, street, city, state, zip code,
+   country and phone.
+2. Check the totals on the right. Payment is **Cash on Delivery**: you pay when the
+   food arrives, so no card details are needed.
+3. Press **Place Order**. You'll see a success message and be taken to your orders page.
 
-### Application Flow
+### 6. Track your orders
+- Open **Orders** from the profile (user icon) menu in the navbar, or go to the
+  Orders page after checkout.
+- Each order shows the items, amount, item count and its **status**:
+  `Food Processing` -> `Out for delivery` -> `Delivered`.
+- Press **Track Order** on an order to refresh and see the latest status.
 
-Customer Frontend / Admin Panel  
-↓  
-Axios HTTP Requests  
-↓  
-Express.js Backend  
-↓  
-Authentication Middleware (JWT)  
-↓  
-Controllers  
-↓  
-Mongoose Models  
-↓  
-MongoDB Database
-
-The backend also serves uploaded food images through a static `/images` endpoint.
-
----
-
-## 5. Detailed Working of the Project
-
-### 5.1 Customer Registration
-
-When a new customer registers:
-
-1. The customer enters their name, email and password.
-2. The frontend sends the registration details to the backend.
-3. The backend checks whether the email already exists.
-4. It validates the email format using Validator.
-5. It checks whether the password contains at least eight characters.
-6. Bcrypt generates a salt and hashes the password.
-7. The new user is saved in MongoDB.
-8. A JWT authentication token is generated.
-9. The token and user role are returned to the frontend.
-
-Passwords are stored as hashed values rather than plain text.
-
-### 5.2 Customer Login
-
-1. The customer enters their email and password.
-2. The frontend sends the credentials to the login API.
-3. The backend searches for the user using their email.
-4. Bcrypt compares the entered password with the stored password hash.
-5. If the credentials are valid, the backend generates a JWT token.
-6. The token and user role are returned.
-7. The frontend stores the token in local storage.
-
-The token is subsequently used to authenticate protected requests.
-
-### 5.3 Browsing Food Items
-
-The home page displays the available food products.
-
-1. The frontend requests the food list from the backend.
-2. The backend retrieves all food documents from MongoDB.
-3. The food information is returned as a JSON response.
-4. React displays the food items with their images, names, descriptions and prices.
-
-Food items can be explored through categories such as:
-
-- Salad
-- Rolls
-- Deserts
-- Sandwich
-- Cake
-- Pure Veg
-- Pasta
-- Noodles
-
-### 5.4 Shopping Cart Management
-
-The shopping cart allows customers to select multiple food items.
-
-**Adding Items:**
-
-1. The customer clicks the Add button.
-2. The selected food item's ID is sent to the backend.
-3. The backend identifies the user through the JWT token.
-4. The item's quantity is increased in the user's cart data.
-5. The updated cart is stored in MongoDB.
-
-**Removing Items:**
-
-1. The customer clicks the remove option.
-2. The backend identifies the selected item.
-3. If the quantity is greater than one, it decreases the quantity by one.
-4. Otherwise, the item is removed from the cart.
-5. The updated cart is saved in MongoDB.
-
-**Cart Calculation:**
-
-The subtotal is calculated using:
-
-Subtotal = Σ (Item Price × Quantity)
-
-Delivery Fee = $2
-
-Total Amount = Subtotal + Delivery Fee
-
-The cart data is also retrieved from MongoDB when an authenticated customer returns to the application.
-
-### 5.5 Placing an Order
-
-The order placement process works as follows:
-
-1. The customer proceeds to checkout.
-2. The customer enters delivery information, including name, email, street, city, state, ZIP code, country and phone number.
-3. The frontend collects all selected food items and their quantities.
-4. The order details and delivery address are sent to the backend.
-5. The backend retrieves the actual food prices from MongoDB.
-6. It recalculates the subtotal using database prices rather than trusting the amount sent by the browser.
-7. A delivery fee of $2 is added.
-8. A new order document is created in MongoDB.
-9. The payment field is set to false because the application uses Cash on Delivery.
-10. The customer's cart is cleared after successful order placement.
-11. The customer is redirected to the My Orders page.
-
-### 5.6 Order Tracking
-
-Customers can view their previously placed orders.
-
-1. The customer opens the My Orders page.
-2. The frontend sends an authenticated request to the backend.
-3. The backend retrieves orders associated with the customer's user ID.
-4. The frontend displays the ordered items, total amount and current order status.
-
-The order status can be:
-
-- Food Processing
-- Out for delivery
-- Delivered
-
-Customers can refresh their order information using the Track Order button.
+### 7. Sign out
+Hover the **user icon** and choose **Logout**.
 
 ---
 
-## 6. User Authentication and Authorization
+## B. For admins (https://feedr-qjd6.vercel.app/)
 
-Feedr uses JSON Web Tokens (JWT) to authenticate users.
+The admin panel is only for people whose account has the `admin` role.
+The admin account is created when the project is seeded (`npm run seed`, see Part 3);
+its email and password come from `ADMIN_EMAIL` / `ADMIN_PASSWORD` in the backend settings.
+Regular customer accounts **cannot** use the admin panel.
 
-### JWT Authentication Working
+### 1. Log in
+Open the admin URL and sign in with the admin email and password. A normal user account is
+rejected with "You are not admin".
+Default admin credentials admin@feedr.com/admin12345
 
-1. The user logs in with valid credentials.
-2. The backend generates a JWT token containing the user's ID.
-3. The token is returned to the frontend.
-4. The frontend stores the token in local storage.
-5. For protected API requests, the token is included in the request headers.
-6. The authentication middleware verifies the token using the JWT secret.
-7. If valid, the user's ID is attached to the request.
-8. The request proceeds to the appropriate controller.
+### 2. Add Items
+1. Click **Add Items** in the sidebar.
+2. Click the upload box and choose a food photo.
+3. Enter the **product name**, **description**, pick a **category** and enter the **price**.
+4. Press **Add**. The dish appears on the customer website immediately.
 
-### Role-Based Access
+Categories must be one of: `Salad, Rolls, Deserts, Sandwich, Cake, Pure Veg, Pasta, Noodles`
+(these match the customer menu tiles).
 
-The application supports two user roles:
+### 3. List Items
+**List Items** shows all dishes (image, name, category, price). Press the round **x**
+to delete a dish; its image file is deleted too.
 
-- **User:** Can browse food, manage their cart and place orders.
-- **Admin:** Can manage food products and customer orders.
+### 4. Orders
+**Orders** lists every customer order with items, delivery address, phone, total and a
+**status dropdown**. Change the status to `Food Processing`, `Out for delivery` or
+`Delivered`; the customer sees it the next time they open or refresh **Orders**.
 
-The backend checks the user's role before performing administrative operations.
-
----
-
-## 7. Admin Panel Working
-
-The Admin Panel is a separate React application.
-
-### Admin Login
-
-- The administrator enters their email and password.
-- The backend verifies the credentials.
-- The role returned by the backend is checked.
-- Only users with the admin role can access administrative functionality.
-
-### Add Food
-
-The administrator provides:
-
-- Food name
-- Description
-- Price
-- Category
-- Food image
-
-Multer handles image uploads and stores the image in the backend uploads folder. The image filename and other food information are saved in MongoDB.
-
-### List and Remove Food
-
-The admin can view all food products stored in the database.
-
-When an administrator removes a product, the backend deletes its database document and removes its associated uploaded image.
-
-### Manage Orders
-
-The admin can view all customer orders, including:
-
-- Ordered food items
-- Customer name
-- Delivery address
-- Phone number
-- Total amount
-- Order status
-
-The administrator can update the order status to Food Processing, Out for delivery or Delivered.
+### 5. Logout
+Use the **Logout** button in the admin navbar.
 
 ---
 
-## 8. Database Design
+# Part 2 - How Feedr works (full-stack flow)
 
-Feedr uses MongoDB with three main collections.
+## 1. Architecture
 
-### 8.1 User Collection
+```
+┌────────────────────┐        ┌────────────────────┐
+│  Customer website  │        │    Admin panel     │
+│  React + Vite      │        │  React + Vite      │
+│  (frontend/)       │        │  (admin/)          │
+└─────────┬──────────┘        └─────────┬──────────┘
+          │      HTTPS / JSON (axios)   │
+          └──────────────┬──────────────┘
+                         ▼
+              ┌─────────────────────┐
+              │  Backend API        │
+              │  Node + Express     │      ┌───────────────┐
+              │  (backend/)         │◄────►│   MongoDB     │
+              │  JWT auth, multer   │      │  users, foods │
+              │  uploads/ images    │      │  orders       │
+              └─────────────────────┘      └───────────────┘
+```
 
-Stores registered customer and administrator information.
+- **Two React apps, one API.** The customer site and the admin panel are separate
+  single-page apps that talk to the **same** Express backend.
+- **The backend is the only thing that touches the database.** The browsers never connect
+  to MongoDB directly.
+- **Every app knows the API address** from the `VITE_API_URL` environment variable
+  (defaults to `http://localhost:4000` for local development).
 
-| Field | Description |
+## 2. Tech stack
+
+| Layer | Technology |
 |---|---|
-| name | User name |
-| email | Unique email address |
-| password | Bcrypt hashed password |
-| role | User or admin |
-| cartData | Shopping cart information |
+| Customer site / Admin | React 18, Vite, React Router, Axios, React Toastify, plain CSS |
+| Backend | Node.js, Express, Mongoose |
+| Database | MongoDB (Atlas) |
+| Auth | JSON Web Tokens (`jsonwebtoken`), password hashing with `bcrypt` |
+| Validation | `validator` (email format) |
+| File uploads | `multer` (images saved to `backend/uploads`) |
 
-The role defaults to `user`.
+## 3. Project structure
 
-### 8.2 Food Collection
-
-Stores food product information.
-
-| Field | Description |
-|---|---|
-| name | Food item name |
-| description | Food description |
-| price | Food price |
-| image | Uploaded image filename |
-| category | Food category |
-
-### 8.3 Order Collection
-
-Stores customer order information.
-
-| Field | Description |
-|---|---|
-| userId | ID of the customer |
-| items | Ordered food items and quantities |
-| amount | Total order amount |
-| address | Customer delivery information |
-| status | Current order status |
-| date | Order creation date |
-| payment | Payment status |
-
-The default order status is Food Processing, and the default payment value is false.
-
----
-
-## 9. API Endpoints
-
-The backend provides the following REST API endpoints.
-
-### User APIs
-
-| Method | Endpoint | Function |
-|---|---|---|
-| POST | `/api/user/register` | Register a new user |
-| POST | `/api/user/login` | Authenticate a user |
-
-### Food APIs
-
-| Method | Endpoint | Function |
-|---|---|---|
-| GET | `/api/food/list` | Retrieve all food items |
-| POST | `/api/food/add` | Add a new food item |
-| POST | `/api/food/remove` | Remove a food item |
-
-### Cart APIs
-
-| Method | Endpoint | Function |
-|---|---|---|
-| POST | `/api/cart/add` | Add an item to cart |
-| POST | `/api/cart/remove` | Remove an item from cart |
-| POST | `/api/cart/get` | Retrieve cart information |
-
-### Order APIs
-
-| Method | Endpoint | Function |
-|---|---|---|
-| POST | `/api/order/place` | Place a new order |
-| POST | `/api/order/userorders` | Retrieve customer orders |
-| GET | `/api/order/list` | Retrieve all orders for admin |
-| POST | `/api/order/status` | Update order status |
-
-Protected endpoints require a valid JWT token in the request headers.
-
----
-
-## 10. Project Folder Structure
-
-```text
+```
 Feedr/
-│
-├── frontend/
-│   ├── public/
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── context/
-│       ├── pages/
-│       ├── App.jsx
-│       └── main.jsx
-│
-├── admin/
-│   ├── public/
-│   └── src/
-│       ├── assets/
-│       ├── components/
-│       ├── context/
-│       ├── pages/
-│       ├── App.jsx
-│       └── main.jsx
-│
 ├── backend/
-│   ├── config/
-│   │   └── db.js
-│   ├── controllers/
-│   │   ├── userController.js
-│   │   ├── foodController.js
-│   │   ├── cartController.js
-│   │   └── orderController.js
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── models/
-│   │   ├── userModel.js
-│   │   ├── foodModel.js
-│   │   └── orderModel.js
-│   ├── routes/
-│   │   ├── userRoute.js
-│   │   ├── foodRoute.js
-│   │   ├── cartRoute.js
-│   │   └── orderRoute.js
-│   ├── seed/
-│   ├── uploads/
-│   └── server.js
-│
-└── README.md
+│   ├── server.js              App entry: middleware, routes, DB connect
+│   ├── config/db.js           MongoDB connection (Mongoose)
+│   ├── models/                userModel, foodModel, orderModel
+│   ├── controllers/           user, food, cart, order logic
+│   ├── routes/                userRoute, foodRoute, cartRoute, orderRoute
+│   ├── middleware/auth.js     JWT verification
+│   ├── seed/                  seed.js + foods.json (admin user + sample menu)
+│   └── uploads/               Dish images (served at /images)
+├── frontend/src/
+│   ├── context/StoreContext   Global state: food list, cart, token, API helpers
+│   ├── pages/                 Home, Cart, PlaceOrder, MyOrders
+│   └── components/            Navbar, Header (hero), ExploreMenu, FoodDisplay,
+│                              FoodItem, Offers, WhyChoose, AppDownload, Footer,
+│                              LoginPopup, Logo, Icons
+└── admin/src/
+    ├── context/StoreContext   Admin token + role state
+    ├── pages/                 Add, List, Orders
+    └── components/            Navbar, Sidebar, Login, Logo, Icons
 ```
+
+## 4. Database models (MongoDB collections)
+
+**users**
+| Field | Type | Notes |
+|---|---|---|
+| `name`, `email`, `password` | String | email is unique; password is a bcrypt hash, never plain text |
+| `role` | String | `"user"` (default) or `"admin"` |
+| `cartData` | Object | `{ "<foodId>": quantity }`, the user's saved cart |
+
+**foods**
+| Field | Type | Notes |
+|---|---|---|
+| `name`, `description`, `category` | String | category matches the menu tiles |
+| `price` | Number | in dollars |
+| `image` | String | filename inside `backend/uploads` |
+
+**orders**
+| Field | Type | Notes |
+|---|---|---|
+| `userId` | String | who placed it |
+| `items` | Array | snapshot of ordered dishes with `quantity` |
+| `amount` | Number | items total + $2 delivery, calculated on the server |
+| `address` | Object | delivery form data |
+| `status` | String | default `Food Processing` |
+| `payment` | Boolean | `false`: paid on delivery |
+| `date` | Date | when the order was placed |
+
+## 5. API reference
+
+Base URL: the backend address (`VITE_API_URL`). All responses are JSON of the form
+`{ success: true/false, ... }`. **Auth** means the request must send the login token in a
+`token` HTTP header.
+
+| Method | Endpoint | Auth | Purpose |
+|---|---|---|---|
+| POST | `/api/user/register` | no | Create account, returns `token` + `role` |
+| POST | `/api/user/login` | no | Log in, returns `token` + `role` |
+| GET | `/api/food/list` | no | All dishes (used by the website and admin) |
+| POST | `/api/food/add` | admin | Add a dish (multipart form with image) |
+| POST | `/api/food/remove` | admin | Delete a dish and its image file |
+| POST | `/api/cart/add` | user | +1 of an item in the saved cart |
+| POST | `/api/cart/remove` | user | −1 of an item (removes the key at 0) |
+| POST | `/api/cart/get` | user | Fetch the saved cart |
+| POST | `/api/order/place` | user | Create an order from the cart |
+| POST | `/api/order/userorders` | user | The logged-in user's orders |
+| GET | `/api/order/list` | admin | All orders |
+| POST | `/api/order/status` | admin | Update an order's status |
+| GET | `/images/<file>` | no | Static dish images |
+
+## 6. Authentication & authorization flow
+
+1. **Register / login** (`LoginPopup` -> `/api/user/register` or `/login`).
+   - Registration checks the email format, requires a password of 8+ characters, rejects
+     duplicate emails, hashes the password with `bcrypt` (`SALT` rounds), and saves the user.
+   - Login looks the user up by email and compares the password hash with `bcrypt.compare`.
+2. The server signs a **JWT** containing the user's id (using `JWT_SECRET`) and returns it
+   with the user's `role`.
+3. The browser stores the token in **`localStorage`** (`token`) and keeps it in React state.
+   On every page load the app reads it back, so you stay signed in after refresh.
+4. For protected routes the browser sends the token in the `token` header.
+   `middleware/auth.js` verifies it with `jwt.verify`, then copies the user id into
+   `req.body.userId` for the controller to use.
+5. **Role check:** admin-only controllers (add/remove food, list orders, update status)
+   load the user from the database and require `role === "admin"`. Hiding buttons in the
+   UI is only cosmetic; the real enforcement is on the server, so a normal user cannot call
+   these endpoints successfully even by hand.
+
+## 7. Customer flow in detail
+
+### 7.1 App start
+`StoreContextProvider` (frontend) runs once when the site loads:
+1. `GET /api/food/list` fills `food_list` (the whole menu, kept in React state).
+2. If a token exists in `localStorage`, it restores it and calls `POST /api/cart/get` to
+   restore the saved cart.
+
+Every page reads this shared state through `useContext(StoreContext)`.
+
+### 7.2 Browsing & filtering
+`Home` holds a `category` state (default `All`). `ExploreMenu` sets it when a tile is
+clicked; `FoodDisplay` renders only the dishes whose `category` matches. This filtering
+happens in the browser; no extra API call is made.
+
+### 7.3 Cart
+- **Add/remove:** `addToCart(id)` / `removeFromCart(id)` update `cartItems`
+  (`{ foodId: qty }`) in React state immediately so the UI feels instant.
+- **If signed in**, the same action is also sent to `/api/cart/add` or `/remove`, which
+  updates `users.cartData` in MongoDB, so the cart follows the user across devices and refreshes.
+- **If not signed in**, the cart exists only in memory for that visit.
+- **Totals:** `getTotalCartAmount()` multiplies each cart item's price (looked up in
+  `food_list`) by its quantity. The Cart page adds the flat $2 delivery fee.
+
+### 7.4 Placing an order (Cash on Delivery)
+1. `PlaceOrder` collects the delivery address and builds the order payload:
+   the cart items (full dish objects + `quantity`), the address, and an `amount`.
+2. `POST /api/order/place` (with the token). The backend:
+   - rejects an empty cart,
+   - **looks up every dish in MongoDB and recalculates the price on the server**
+     (`sum(price × quantity) + $2`), ignoring any amount the browser sent, so the total
+     can't be tampered with,
+   - saves an `orders` document with `payment: false` and status `Food Processing`,
+   - empties the user's saved `cartData`.
+3. The frontend clears its local cart, shows a success toast and navigates to `/myorders`.
+
+### 7.5 Viewing orders
+`MyOrders` calls `POST /api/order/userorders`; the server returns only orders whose
+`userId` matches the token's user. **Track Order** re-fetches so a status change made by
+the admin shows up.
+
+## 8. Admin flow in detail
+
+1. **Login:** the admin app uses the same `/api/user/login`. It stores the token and
+   `role` in `localStorage`; a non-admin role is rejected with "You are not admin".
+2. **Add dish:** the form is sent as `multipart/form-data` to `/api/food/add`.
+   `multer` first saves the image to `backend/uploads` as `<timestamp><original name>`,
+   then the controller verifies the admin role and stores the dish in MongoDB with that
+   filename in `image`.
+3. **List / delete dish:** `/api/food/list` fills the table; `/api/food/remove` checks the
+   admin role, deletes the image file from `uploads`, and deletes the database record.
+4. **Orders:** `/api/order/list` returns all orders. Changing the status dropdown calls
+   `/api/order/status`, which updates the order's `status` field.
+5. Because both apps share one database, a dish added in the admin panel appears on the
+   customer site on the next load, and a status change appears in the customer's Orders page.
+
+## 9. How images work
+
+1. Admin uploads a photo -> `multer` writes it to `backend/uploads/`.
+2. Only the **filename** is stored in MongoDB (`foods.image`).
+3. Express serves that folder publicly at `/images` (`app.use("/images", express.static("uploads"))`).
+4. The website builds the image address as `<API URL>/images/<filename>` and uses it in an `<img>`.
+
+The project ships with 32 sample dish images in `uploads/` for the seeded menu.
+Note: on free hosting the server's disk is temporary, so images uploaded later through
+the admin panel may disappear when the backend restarts or redeploys.
+
+## 10. Seeding (starter data)
+
+`npm run seed` (in `backend/`) connects to the database and:
+1. creates an **admin user** (`ADMIN_EMAIL` / `ADMIN_PASSWORD`, defaults in `.env.example`),
+   or promotes the account if it exists;
+2. inserts the **32 sample dishes** from `seed/foods.json`, matching them to the sample
+   images in `uploads/`.
+It is safe to run repeatedly; existing records are skipped.
+
+## 11. Environment variables
+
+**backend/.env**
+| Variable | Purpose |
+|---|---|
+| `PORT` | Port the API listens on (default 4000) |
+| `MONGO_URL` | MongoDB connection string (include a database name such as `/feedr`) |
+| `JWT_SECRET` | Long random string used to sign login tokens |
+| `SALT` | bcrypt rounds for password hashing (e.g. `10`) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Used only by `npm run seed` |
+
+**frontend/.env and admin/.env**
+| Variable | Purpose |
+|---|---|
+| `VITE_API_URL` | Backend address, no trailing slash (defaults to `http://localhost:4000`) |
 
 ---
 
-## 11. Installation and Setup
+# Part 3 - Run it locally
 
-### Prerequisites
-
-Install the following:
-
-- Node.js (version 18 or later)
-- npm
-- MongoDB Atlas account
-- Git
-
-### Step 1: Clone the Repository
+Requirements: Node.js 18+, and a MongoDB database (Atlas or local).
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd Feedr
-```
-
-### Step 2: Install Backend Dependencies
-
-```bash
+# 1) Backend
 cd backend
+cp .env.example .env          # then fill in MONGO_URL and JWT_SECRET
 npm install
-```
+npm run seed                  # admin user + sample menu
+npm run server                # http://localhost:4000  ("DB Connected")
 
-### Step 3: Configure Backend Environment Variables
-
-Create a `.env` file inside the backend folder.
-
-Configure the MongoDB connection URL, JWT secret and other required environment variables.
-
-### Step 4: Install Frontend Dependencies
-
-Open a new terminal:
-
-```bash
+# 2) Customer website (new terminal)
 cd frontend
 npm install
-```
+npm run dev                   # http://localhost:5173
 
-### Step 5: Install Admin Dependencies
-
-Open another terminal:
-
-```bash
+# 3) Admin panel (new terminal)
 cd admin
 npm install
+npm run dev                   # http://localhost:5174
 ```
+
+Generate a `JWT_SECRET` with:
+`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
 
 ---
 
-## 12. Environment Variables
+# Notes & current behaviour
 
-### Backend – `backend/.env`
-
-```env
-PORT=4000
-MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_secure_random_secret
-SALT=10
-
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=change_this_password
-```
-
-### Frontend – `frontend/.env`
-
-```env
-VITE_API_URL=http://localhost:4000
-```
-
-### Admin – `admin/.env`
-
-```env
-VITE_API_URL=http://localhost:4000
-```
-
-**Security:** Never upload actual `.env` files, MongoDB credentials or JWT secrets to GitHub. Use placeholder values in example files.
-
----
-
-## 13. Running the Application
-
-Three separate terminals are required.
-
-### Terminal 1 – Backend
-
-```bash
-cd backend
-npm run server
-```
-
-Backend runs at:
-
-`http://localhost:4000`
-
-### Terminal 2 – Customer Frontend
-
-```bash
-cd frontend
-npm run dev
-```
-
-### Terminal 3 – Admin Panel
-
-```bash
-cd admin
-npm run dev
-```
-
-### Initial Database Setup
-
-To create the administrator account and insert sample food items, run:
-
-```bash
-cd backend
-npm run seed
-```
-
-The seed script creates the admin account using the configured `ADMIN_EMAIL` and `ADMIN_PASSWORD` values and inserts sample food products from the seed data.
-
-Use the configured administrator credentials to log in to the Admin Panel.
-
----
-
-## 14. Future Enhancements
-
-The project can be extended with:
-
-- Online payment gateway integration.
-- Order cancellation functionality.
-- Customer reviews and ratings.
-- Real-time order tracking.
-- Email and SMS order notifications.
-- Search and advanced food filters.
-- Discount coupons and promotional offers.
-- Cloud image storage.
-- Improved admin analytics and sales reports.
-
----
-
-## 15. Conclusion
-
-Feedr is a full-stack food ordering application that demonstrates the integration of React.js, Node.js, Express.js and MongoDB.
-
-It provides a complete ordering workflow, starting from customer registration and food browsing to cart management, order placement and order tracking.
-
-The separate administrator interface provides food management and order management functionality.
-
-The project demonstrates practical implementation of REST APIs, JWT authentication, password hashing, role-based access, database operations, image uploading and frontend-backend integration.
-
-**Project Name:** Feedr – Online Food Ordering System
-
-**Technology Stack:** MERN (MongoDB, Express.js, React.js, Node.js)
+- **No online payments:** every order is Cash on Delivery (`payment: false`).
+- **Guest carts aren't saved:** items added before signing in live only in the browser and are not merged into the account cart on login.
+- **Delivery fee:** a flat $2 per order, added on the server.
+- **Status updates** appear in a customer's Orders page when they reload it or press **Track Order** (there is no live push).
+- **Security basics in place:** hashed passwords, signed tokens, server-side admin checks, and server-side price calculation. Change the default admin password before real use.
